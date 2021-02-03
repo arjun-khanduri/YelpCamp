@@ -1,10 +1,21 @@
 var express = require('express');
 var app = express();
 var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
 
-var campgrounds = [{name: 'Selmon Bhai', image: 'https://simg-memechat.s3.ap-south-1.amazonaws.com/74d7259d8bf4ad4a812a111d822ec2c5.jpg'}]
+mongoose.connect("mongodb://localhost/YelpCamp");
 
-app.use(bodyParser.urlencoded({extended: true}));
+var campgroundSchema = new mongoose.Schema({
+    name: String,
+    image: String,
+    description: String
+})
+
+var Campground = mongoose.model('Campground', campgroundSchema);
+
+var campgrounds = [{ name: 'Selmon Bhai', image: 'https://simg-memechat.s3.ap-south-1.amazonaws.com/74d7259d8bf4ad4a812a111d822ec2c5.jpg' }]
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 
@@ -13,19 +24,39 @@ app.get('/', (req, res) => {
 })
 
 app.get('/campgrounds', (req, res) => {
-    res.render('campgrounds', {campgrounds: campgrounds});
+    Campground.find({}, (err, campgrounds) => {
+        if (err)
+            console.log(err);
+        else
+            res.render('index', { campgrounds: campgrounds });
+    });
 });
 
 app.get('/campgrounds/new', (req, res) => {
     res.render('new');
 });
 
+app.get('/campgrounds/:id', (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if(err)
+            console.log(err);
+        else
+            res.render('show', { campground: foundCampground });
+    });
+    
+})
+
 app.post('/campgrounds', (req, res) => {
     var name = req.body.name;
     var image = req.body.image;
-    var tempCampground = {name: name, image: image}; 
-    campgrounds.push(tempCampground);
-    res.redirect('/campgrounds');
+    var desc = req.body.description;
+    var tempCampground = { name: name, image: image, description: desc};
+    Campground.create(tempCampground, (err, temp) => {
+        if(err)
+            console.log(err);
+        else
+            res.redirect('/campgrounds');
+    });
 });
 
 
