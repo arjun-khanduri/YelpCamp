@@ -18,7 +18,8 @@ mongoose.connect("mongodb://localhost/YelpCamp", { useUnifiedTopology: true, use
 var campgrounds = [{ name: 'Selmon Bhai', image: 'https://simg-memechat.s3.ap-south-1.amazonaws.com/74d7259d8bf4ad4a812a111d822ec2c5.jpg' }]
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/'));
+console.log(__dirname);
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
