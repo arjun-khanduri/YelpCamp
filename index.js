@@ -4,20 +4,29 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var Campground = require('./models/campground');
 var Comment = require('./models/comment');
+var User = require('./models/user');
 var seedDB = require('./seeds');
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+
 
 seedDB();
-// var Comment = require('./models/comment');
-// var User = require('./models/user');
 
 
 mongoose.connect("mongodb://localhost/YelpCamp", { useUnifiedTopology: true, useNewUrlParser: true });
 
-
-
-var campgrounds = [{ name: 'Selmon Bhai', image: 'https://simg-memechat.s3.ap-south-1.amazonaws.com/74d7259d8bf4ad4a812a111d822ec2c5.jpg' }]
-
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('express-session')({
+    secret: "Sample Hash",
+    resave: false,
+    saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(express.static(__dirname + '/public/'));
 console.log(__dirname);
 app.set('view engine', 'ejs');
@@ -92,6 +101,23 @@ app.post('/campgrounds/:id/comments', (req, res) => {
             })
 
     })
+})
+
+app.get('/register', (req, res) => {
+    res.render('register');
+})
+
+app.post('/register', (req, res) => {
+    var newUser = new User({username:  req.body.username});
+    User.register(newUser, req.body.password, (err, user) => {
+        if(err){
+            console.log(err);
+            return res.render('register');
+        }
+        passport.authenticate('local')(req, res, () => {
+            res.redirect('/campgrounds');
+        });
+    });
 })
 
 app.listen(3000, (req, res) => {
