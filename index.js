@@ -79,21 +79,21 @@ app.get('/campgrounds/:id/comments/new', (req, res) => {
         if (err)
             console.log(err);
         else
-            res.render('comments/new', {campground: campground});
+            res.render('comments/new', { campground: campground });
     })
 })
 
 app.post('/campgrounds/:id/comments', (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
-        if(err){
+        if (err) {
             console.log(err);
             res.redirect('/campgrounds');
         }
         else
             Comment.create(req.body.comment, (err, comment) => {
-                if(err)
+                if (err)
                     console.log(err);
-                else{
+                else {
                     campground.comments.push(comment);
                     campground.save();
                     res.redirect('/campgrounds/' + campground._id);
@@ -108,9 +108,9 @@ app.get('/register', (req, res) => {
 })
 
 app.post('/register', (req, res) => {
-    var newUser = new User({username:  req.body.username});
+    var newUser = new User({ username: req.body.username });
     User.register(newUser, req.body.password, (err, user) => {
-        if(err){
+        if (err) {
             console.log(err);
             return res.render('register');
         }
@@ -118,7 +118,18 @@ app.post('/register', (req, res) => {
             res.redirect('/campgrounds');
         });
     });
-})
+});
+
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.post('/login', passport.authenticate('local',
+    {
+        successRedirect: '/campgrounds',
+        failureRedirect: '/login'
+    }), (req, res) => {
+});
 
 app.listen(3000, (req, res) => {
     console.log('Server listening on port 3000');
