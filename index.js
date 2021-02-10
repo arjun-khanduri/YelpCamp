@@ -13,7 +13,7 @@ var LocalStrategy = require('passport-local');
 seedDB();
 
 isLoggedIn = (req, res, next) => {
-    if(req.isAuthenticated()) {
+    if (req.isAuthenticated()) {
         return next();
     }
     res.redirect('/login');
@@ -37,16 +37,21 @@ app.use(express.static(__dirname + '/public/'));
 console.log(__dirname);
 app.set('view engine', 'ejs');
 
+app.use((req,res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
 app.get('/', (req, res) => {
     res.render('landing');
-})
+});
 
 app.get('/campgrounds', (req, res) => {
     Campground.find({}, (err, campgrounds) => {
         if (err)
             console.log(err);
         else
-            res.render('campgrounds/index', { campgrounds: campgrounds });
+            res.render('campgrounds/index', { campgrounds: campgrounds, currentUser: req.user });
     });
 });
 
@@ -65,7 +70,7 @@ app.get('/campgrounds/:id', (req, res) => {
         }
     });
 
-})
+});
 
 app.post('/campgrounds', (req, res) => {
     var name = req.body.name;
@@ -86,8 +91,8 @@ app.get('/campgrounds/:id/comments/new', isLoggedIn, (req, res) => {
             console.log(err);
         else
             res.render('comments/new', { campground: campground });
-    })
-})
+    });
+});
 
 app.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
     Campground.findById(req.params.id, (err, campground) => {
@@ -104,14 +109,14 @@ app.post('/campgrounds/:id/comments', isLoggedIn, (req, res) => {
                     campground.save();
                     res.redirect('/campgrounds/' + campground._id);
                 }
-            })
+            });
 
-    })
-})
+    });
+});
 
 app.get('/register', (req, res) => {
     res.render('register');
-})
+});
 
 app.post('/register', (req, res) => {
     var newUser = new User({ username: req.body.username });
@@ -135,7 +140,7 @@ app.post('/login', passport.authenticate('local',
         successRedirect: '/campgrounds',
         failureRedirect: '/login'
     }), (req, res) => {
-});
+    });
 
 app.get('/logout', (req, res) => {
     req.logout();
@@ -146,4 +151,3 @@ app.get('/logout', (req, res) => {
 app.listen(3000, (req, res) => {
     console.log('Server listening on port 3000');
 });
-
