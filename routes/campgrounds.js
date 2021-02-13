@@ -2,6 +2,13 @@ var express = require('express');
 var router = express.Router();
 var Campground = require('../models/campground');
 
+isLoggedIn = (req, res, next) => {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    res.redirect('/login');
+}
+
 router.get('/', (req, res) => {
     Campground.find({}, (err, campgrounds) => {
         if (err)
@@ -11,7 +18,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/new', (req, res) => {
+router.get('/new', isLoggedIn, (req, res) => {
     res.render('campgrounds/new');
 });
 
@@ -27,11 +34,15 @@ router.get('/:id', (req, res) => {
 
 });
 
-router.post('/', (req, res) => {
+router.post('/', isLoggedIn, (req, res) => {
     var name = req.body.name;
     var image = req.body.image;
     var desc = req.body.description;
-    var tempCampground = { name: name, image: image, description: desc };
+    var author = {
+        id: req.user._id,
+        username: req.user.username
+    }
+    var tempCampground = { name: name, image: image, description: desc, author : author };
     Campground.create(tempCampground, (err, temp) => {
         if (err)
             console.log(err);
