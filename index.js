@@ -9,11 +9,12 @@ var LocalStrategy = require('passport-local');
 var commentRoutes = require('./routes/comments');
 var campgroundRoutes = require('./routes/campgrounds');
 var indexRoutes = require('./routes/index');
-
+var methodOverride = require('method-override');
 // seedDB();
 
-mongoose.connect("mongodb://localhost/YelpCamp", { useUnifiedTopology: true, useNewUrlParser: true });
+mongoose.connect("mongodb://localhost/YelpCamp", { useUnifiedTopology: true, useNewUrlParser: true, useFindAndModify: false });
 
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(require('express-session')({
     secret: "Sample Hash",
