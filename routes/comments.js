@@ -27,7 +27,10 @@ router.post('/', isLoggedIn, (req, res) => {
         }
         else{
             var text = req.body.text;
-            var author = req.user.username;
+            var author = {
+                id: req.user._id,
+                username: req.user.username,
+            } ; 
             var tempComment = {text : text, author : author};
             Comment.create(tempComment, (err, comment) => {
                 if (err)
