@@ -51,4 +51,22 @@ router.post('/', isLoggedIn, (req, res) => {
     });
 });
 
- module.exports = router;
+router.get('/:id/edit', (req, res) => {
+    Campground.findById(req.params.id, (err, foundCampground) => {
+        if(err)
+            res.redirect('/campgrounds');
+        else
+            res.render('campgrounds/edit', {campground: foundCampground});
+    });
+});
+
+router.put('/:id/edit', (req, res) =>{
+    Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, foundCampground) => {
+        if(err)
+            res.redirect('/campgrounds');
+        else
+            res.redirect('/campgrounds/' + req.params.id);
+    });
+});
+
+module.exports = router;
