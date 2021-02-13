@@ -22,29 +22,29 @@ seedDB = () => {
             console.log(err);
         else
             console.log("Removed everything from campground");
-        data.forEach((seed) => {
-            Campground.create(seed, (err, campground) => {
-                if (err)
-                    console.log(err);
-                else {
-                    console.log("Updated Database");
-                    Comment.create(
-                        {
-                            text: "This is a good place",
-                            author: "Arjun Khanduri"
-                        }, (err, com) => {
-                            if (err)
-                                console.log(err);
-                            else {
-                                campground.comments.push(com);
-                                campground.save();
-                                console.log("Created Comment");
-                            }
-                        }
-                    )
-                }
-            })
-        })
+        // data.forEach((seed) => {
+        //     Campground.create(seed, (err, campground) => {
+        //         if (err)
+        //             console.log(err);
+        //         else {
+        //             console.log("Updated Database");
+        //             Comment.create(
+        //                 {
+        //                     text: "This is a good place",
+        //                     author: "Arjun Khanduri"
+        //                 }, (err, com) => {
+        //                     if (err)
+        //                         console.log(err);
+        //                     else {
+        //                         campground.comments.push(com);
+        //                         campground.save();
+        //                         console.log("Created Comment");
+        //                     }
+        //                 }
+        //             )
+        //         }
+        //     })
+        // })
     })
 
 }
