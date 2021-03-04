@@ -70,7 +70,9 @@ router.put('/:id/edit', (req, res) =>{
 });
 
 router.delete('/:id', (req, res) =>{
-    res.send('Trying to delete something');
-})
+    Campground.findByIdAndRemove(req.params.id, (err) => {
+        res.redirect('/campgrounds');
+    });
+});
 
 module.exports = router;
