@@ -69,4 +69,8 @@ router.put('/:id/edit', (req, res) =>{
     });
 });
 
+router.delete('/:id', (req, res) =>{
+    res.send('Trying to delete something');
+})
+
 module.exports = router;
