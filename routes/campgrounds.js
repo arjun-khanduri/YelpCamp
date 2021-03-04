@@ -9,7 +9,7 @@ isLoggedIn = (req, res, next) => {
     res.redirect('/login');
 }
 
-checkCampgoundOwnership = (req, res, next) => {
+checkCampgroundOwnership = (req, res, next) => {
     if (req.isAuthenticated()) {
         Campground.findById(req.params.id, (err, foundCampground) => {
             if (err)
@@ -70,13 +70,13 @@ router.post('/', isLoggedIn, (req, res) => {
     });
 });
 
-router.get('/:id/edit', checkCampgoundOwnership, (req, res) => {
+router.get('/:id/edit', checkCampgroundOwnership, (req, res) => {
     Campground.findById(req.params.id, (err, foundCampground) => {
         res.render('campgrounds/edit', { campground: foundCampground });
     });
 });
 
-router.put('/:id/edit', (req, res) => {
+router.put('/:id/edit', checkCampgroundOwnership, (req, res) => {
     Campground.findByIdAndUpdate(req.params.id, req.body.campground, (err, foundCampground) => {
         if (err)
             res.redirect('/campgrounds');
@@ -85,7 +85,7 @@ router.put('/:id/edit', (req, res) => {
     });
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', checkCampgroundOwnership, (req, res) => {
     Campground.findByIdAndRemove(req.params.id, (err) => {
         res.redirect('/campgrounds');
     });
