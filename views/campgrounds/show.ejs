@@ -51,6 +51,9 @@
                                 <a class='btn btn-xs btn-warning'
                                     href='/campgrounds/<%= campground._id %>/comments/<%= comment._id %>/edit'>Edit
                                 </a>
+                                <form id="delete-form" action="/campgrounds/<%=campground._id %>/comments/<%= comment._id %>?_method=DELETE" method="post">
+                                    <input type="submit" value="Delete" class="btn btn-xs btn-danger" />
+                                </form>
                             </div>
                         </div>
                         <% }) %>
