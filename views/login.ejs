@@ -1,9 +1,18 @@
 <%- include ('./partials/header')%>
 
 
-<h1>Login</h1>
-<form action = '/login' method = 'POST'>
-    <input type = 'text' name = 'username' id = 'username' placeholder = 'Username'>
-    <input type = 'password' name = 'password' id = 'password' placeholder = 'password'>
-    <input type = 'submit' value = 'Login'>
-</form>
+    
+    <div class = 'login-form'>
+        <h1 style="text-align: center;">Login</h1>
+        <form action='/login' method='POST'>
+            <div class='form-group'>
+                <label for="username">Username</label>
+                <input type='text' class='form-control' name='username' id='username' placeholder='Username'>
+            </div>
+            <div class='form-group'>
+                <label for="password">Password</label>
+                <input type='password' class='form-control' name='password' id='password' placeholder='Password'>
+            </div>
+            <input type='submit' class='btn btn-primary btn-block' value='Login'>
+        </form>
+    </div>

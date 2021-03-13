@@ -13,3 +13,16 @@
 #delete-form{
     display: inline;
 }
+
+.login-form{
+    /* display: block;
+    
+    margin: 0 auto; */
+    margin: 0;
+    width: 30%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
