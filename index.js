@@ -3,7 +3,6 @@ var app = express();
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var User = require('./models/user');
-var seedDB = require('./seeds');
 var passport = require('passport');
 var LocalStrategy = require('passport-local');
 var commentRoutes = require('./routes/comments');
